@@ -1,0 +1,26 @@
+llllllllllllll
+ll          ll
+ll          ll
+ll    3     ll
+ll          ll
+ll          ll
+ll          ll
+ll          ll
+llllll--llllllllllllllllll
+ll  !You!   ll          ll
+ll    |     ll          ll
+ll !-(2)-!  ll          ll
+ll    |      |     4    ||\\\\\\\ -->
+ll  !Are!    |          ||\\\\\\\ --> Upstairs
+ll    |     ll          ll
+ll  !Here!  ll          ll
+ll          ll          ll
+llllll--llllllllllllllllll
+ll          ll
+ll          ll
+ll          ll
+ll    1     ll
+ll          ll
+ll          ll
+ll          ll
+llllllllllllll

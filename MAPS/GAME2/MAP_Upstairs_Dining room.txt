@@ -1,0 +1,18 @@
+                          llllllllllllll
+                          l   ??????   l
+                          l   ??????   l
+      llllllllllllllllllllllllll--lllllllllllllllllllllllll 
+      l                  l             l                  l 
+      l        (2)       l     (1)     l       (3)        l 
+      l	                                                  l 
+      l      Bed Room       Corridor 1       Kitchen      l 
+      l                  l             l                  l 
+      l                  l             l                  l 
+      llllll---llllllllllllllll___lllllllllllllll---lllllll 
+      l	                  0O  l___l                       l 
+      l	        (4)       O0  l___l          (5)          l 
+      l	                      l___l      Dining Room      l 
+      l	       Lounge         lllll                       l 
+      l	                        |       !You Are Here!    l 
+      l                     Corr|idor 2                   l 
+      lllllllllllllllllllllllllllllllllllllllllllllllllllll
