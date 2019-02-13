@@ -1,64 +1,29 @@
 from subprocess import Popen
+import os
 import time
 import sys
 import math
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>---F--U--N--C--T--I--O--N--S--->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-def PrintSlow(thing):
+def PrintSlow(thing, slep=None):
 	for char in thing:
 		time.sleep(.05)
 		sys.stdout.write(char)
 		sys.stdout.flush()
+	if slep != None:
+		time.sleep(slep)
 #Function to print things out slow throughout the game so that it seems that they are being typed real time
 #the "sys.stdout.write()" is there so it works in a terminal because of the buffer with the print function
 #the "sys.stdout.flush()" is there so that sys.stdout.write()'s parameters don't appear on the error list
 
 def ShowMap():
-	if GAME1:
-		if Room1:
-			with open("MAPS/GAME1/MAP_ROOM1.txt", "r") as M2:
-				for line in M2:
-					print(line, end = "")
-				print("\n")
-		if Room2:
-			with open("MAPS/GAME1/MAP_ROOM2.txt", "r") as M2:
-				for line in M2:
-					print(line, end = "")
-				print("\n")
-		elif Room3:
-			with open("MAPS/GAME1/MAP_ROOM3.txt", "r") as M3:
-				for line in M3:
-					print(line, end = "")
-				print("\n")
-		elif Room4:
-			with open("MAPS/GAME1/MAP_ROOM4.txt", "r") as MU:
-				for line in MU:
-					print(line, end = "")
-				print("\n")
-	else:
-		if Corridor1:
-			with open("MAPS/GAME2/MAP_UPSTAIRS_Corridor1.txt", "r") as MUC:
-				for line in MUC:
-					print(line, end = "")
-				print("\n")
-		elif Lounge:
-			with open("MAPS/GAME2/MAP_UPSTAIRS_Lounge.txt", "r") as MUL:
-				for line in MUL:
-					print(line, end = "")
-				print("\n")
-		elif Bed_Room:
-			with open("MAPS/GAME2/MAP_UPSTAIRS.txt", "r") as MUBR:
-				for line in MUBR:
-					print(line, end = "")
-				print("\n")
-		elif Kitchen:
-			with open("MAPS/GAME2/MAP_UPSTAIRS.txt", "r") as MUK:
-				for line in MUK:
-					print(line, end = "")
-				print("\n")
+	with open("MAPS/GAME1/"+CurrentRoom+".txt", "r") as DaRoom:
+		for line in DaRoom:
+			print(line, end = "")
+		print("\n")
 #Depending on where you are in the game
 #the function gives you the corresponding map
 #which also tells you where you are in the game.a
-#-----------------------------------------------------------
+#-----------------------------------------------------------#It's too long it needs shortening
 def ShowInventory():
 	with open("Inventory.txt", "r") as invtest:
 		for line in invtest:
@@ -75,23 +40,27 @@ def InventoryCheck(Item):
 #another simple funcion that checks if an item is currently in the player's inventory
 #---------------------------------------------------------------------------------------
 def textreplace(IString):
-	endaddition = 0
 	magic_number = (58 - len(IString)) // 2
-	if len(IString) % 2 != 0:
-		print("|" + (magic_number * " ") + IString + (magic_number * " ") + (2 * " ") + "|")
+	if len(IString) % 2 == 0:
+		return "|" + (magic_number * " ") + IString + (magic_number * " ") + "|"
 	else:
-		print("|" + (magic_number * " ") + IString + (magic_number * " ") + (3 * " ") + "|")
+		return "|" + (magic_number * " ") + IString + (magic_number * " ") + " " + "|"
 #Function to add another item in the inventory...it will remain that way unless the inventory is blanked again.
 #----------------------------------------------------------------------------------------------------------------
-def Inventoryadd():
+
+def Inventoryadd(Item):
+	global timesran
+	numba = str(timesran-7) + "." #for the number before the item in the Inventory
 	with open("Inventory.txt", "r") as invtest:
 					thefile = invtest.readlines()
 
-	thefile.insert(timesran, "|                       1. Basement Key                     |\n")
+	thefile.insert(timesran, textreplace(numba + Item) + "\n")
 
 	with open("Inventory.txt", "w") as invtest:
 		thefile = "".join(thefile)
 		invtest.write(thefile)
+
+	timesran += 1
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<---F--U--N--C--T--I--O--N--S---<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #--------------------------------------------------------------------------------------------------------------
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>---G--A--M--E___I--N--I--T--I--A--L--I--Z--A--T--I--O--N--->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -101,11 +70,11 @@ GAME2 = False
 GAME3 = False
 #|---LEVELS---|
 
-PrintSlow("Somewhere Unknown\n")
-PrintSlow("UGH...my head hurts...\nWhere the fuck I am?...\nI can barely see and the walls in this corner are really damp. Ugh..\n")
+#!@$%^&*-------------------------The beginning----------------------*&^%$@!#
 PrintSlow("HINT: -At any time you can use 'look around' (to look around)\n")
 #=========================================================================================
 #|---The Room changing system---|
+CurrentRoom = "Room1"
 Room1 = True
 Room2 = False
 Room3 = False
@@ -113,13 +82,13 @@ Room4 = False
 #|---The Room changing system---|
 #=========================================================================================
 #|---Inventory Items---|
-ExitKey = ["Fireplace Key", "Hmm a not-so shiny key...this should play a part in helping me get out of here....where ever the hell this is"]
+ExitKey = ["Basement Key", "Hmm a not-so shiny key...this should play a part in helping me get out of here....where ever the hell this is"]
 Crowbar = ["Crowbar", "Always handy to have one of these when there's a door that needs unjamming...it may even be useful after that"]
 MAP = ["Basement Map", "A large peice of paper seems to have the layout of the floor that I'm on printed on to it"]
 #|---Inventory Items---|
 #=========================================================================================
 #|---Firsttime Bools for unique output when you enter somewhere for the first time---|
-timesran = 8
+timesran = 8 #----------------------------------------------------variable for which line to write the item to---
 room1firsttime = True
 room2firsttime = True
 room3firsttime = True
@@ -193,6 +162,7 @@ while GAME1 == True:
 
 		elif Action in TheDoor:
 			Room2 = True
+			CurrentRoom = "ROOM2"
 			room1firsttime = False
 			Room1 = False
 		else:
@@ -205,7 +175,7 @@ while GAME1 == True:
 		Door1 = ["opendoor1", "openthefirstdoor", "openfirstdoor", ]
 		Door2 = ["opendoor2", "opentheseconddoor", "openseconddoor", ]
 		Door3 = ["opendoor3", "openthethirddoor", "openthirddoor", ]
-		Fireplace = ["lookinthefireplace", "inspectfireplace", "lookatfireplace", "fireplace"]
+		Fireplace = ["lookinthefireplace", "inspectfireplace", "lookatfireplace", "fireplace", "searchfireplace"]
 
 
 
@@ -225,6 +195,7 @@ while GAME1 == True:
 
 		elif Action in Door1 :
 			Room1 = True
+			CurrentRoom = "ROOM1"
 			Room2 = False
 
 		elif Action in Mapopt and InventoryCheck(MAP[0]) == True:
@@ -246,11 +217,13 @@ while GAME1 == True:
 
 		elif Action in Door2:
 			Room3 = True
+			CurrentRoom = "ROOM3"
 			Room2 = False
 
 		elif Action in Door3:
 			if InventoryCheck(Crowbar[0]) == True:
 				Room4 = True
+				CurrentRoom = "ROOM4"
 				Room2 = False
 			else:
 				PrintSlow("Oh shit the door seems locked...But it doesn't seem unbreakable...though I can't get through without any tools...or maybe a key...looks like I'll have to explore further\n")
@@ -259,17 +232,7 @@ while GAME1 == True:
 			if InventoryCheck(ExitKey[0]) == False:
 				PrintSlow("There is no fire...and there seems to be nothing of import-... Oh look a key!, I'll have that\n")
 				Inventory.append(ExitKey[0])
-
-				with open("Inventory.txt", "r") as invtest:
-					thefile = invtest.readlines()
-
-				thefile.insert(8,"|                       1. Basement Key                     |\n")
-
-				with open("Inventory.txt", "w") as invtest:
-					thefile = "".join(thefile)
-					invtest.write(thefile)
-
-				timesran += 1
+				Inventoryadd(ExitKey[0])
 
 			else:
 				PrintSlow("There is no fire...and there seems to be nothing of importance...\n")
@@ -313,6 +276,7 @@ while GAME1 == True:
 		elif Action in Floortile and MAP[0] not in Inventory:
 			PrintSlow("AHA a MAP!!...wait why would someone hide a map deliberatelly under a stone slab?..let's have a look..\n")
 			Inventory.append(MAP[0])
+			Inventoryadd(MAP[0])
 			ShowMap()
 
 		elif "examine" in Action:
@@ -331,10 +295,12 @@ while GAME1 == True:
 
 		elif Action in Thecrowbar and InventoryCheck(Crowbar[0]) == False:
 			Inventory.append(Crowbar[0])
+			Inventoryadd(Crowbar[0])
 			PrintSlow("OK I've got the crowbar...good thinking...")
 
 		elif Action in gtfo:
 			Room2 = True
+			CurrentRoom = "ROOM2"
 			Room3 = False
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #-----------------------------------------------R-O-O-M--4-----------------------------------------------#
@@ -383,12 +349,14 @@ while GAME1 == True:
 				PrintSlow("It's fucking locked...unlike the last door This one will definitely need a key for me to get through so I better get looking.\n")
 		elif Action in Backdoor:
 			Room2 = True
+			CurrentRoom = "ROOM2"
 			Room4 = False
 		else:
 			PrintSlow("eh..nO.")
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 stairs = True
+CurrentRoom = "stairs"
 Corridor1 = False
 Lounge = False
 Dining_Room = False
@@ -525,7 +493,7 @@ while GAME2:
 #--------------------------------------------C-O-R-R-I-D-O-R--1------------------------------------------#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 	while Corridor1:
-		takingmap = ["takemap", "takethemap"]
+		takingmap = ["takemap", "takethemap", "getmap", "getthemap"]
 
 		firsttimeDilema(firstcorridor)
 		firstcorridor = False
@@ -563,18 +531,21 @@ while GAME2:
 		elif Action in ShowingInventory:
 			ShowInventory()
 
-		#---Door Actions which never get old obviously---
+		#---Door Actions which never get old..obviously---
 		elif Action in Bed_RoomDoor:
 			Bed_Room = True
+			CurrentRoom = "Bed_Room"
 			Corridor1 = False
 		elif Action in KitchenDoor:
 			Kitchen = True
+			CurrentRoom = "Kitchen"
 			Corridor1 = False
 		elif Action == "go back":
 			stairs = True
+			CurrentRoom = "stiars"
 			Corridor1 = False
 			break
-		#---Door Actions which never get old obviously---
+		#---Door Actions which never get old..obviously---
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #-----------------------------------------T-H-E--K-I-T-C-H-E--N------------------------------------------#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -617,7 +588,7 @@ while GAME2:
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #---------------------------------------------T-H-E--L-O-U-N-G-E-----------------------------------------#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-	while Dining_Room:
+	while Lounge:
 
 		Action = input("")
 		Action = Action.lower()
@@ -628,7 +599,7 @@ while GAME2:
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #------------------------------------------T-H-E--B-E-D--R-O-O-M-----------------------------------------#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-	while Dining_Room:
+	while Bed_Room:
 
 		Action = input("")
 		Action = Action.lower()
